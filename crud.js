@@ -1,11 +1,19 @@
 var express = require('express');
 var ejs = require('ejs');
 var fs = require('fs');
-//var bodyParser = require('body-parser');
 
+fs.readFile("pets.json",function(e,data)
+{
+
+var parsed = JSON.parse(data);
+console.log(parsed);
 var app = express();
-// app.use(bodyParser.urlencoded({extended: true}));
 var array = [];
+
+parsed.forEach(function(animals)
+{
+  array.push(animals);
+})
 var msg = {
   "status":"Success!"
           }
@@ -75,10 +83,10 @@ app.get('/:method/:name',function(req,res)
             array.splice(index,1);
             res.json(msg);
 
-          //   fs.writeFile("pets.json",JSON.stringify(array),function(e)
-          //   {
-          //     console.log('done');
-          //   })
+            fs.writeFile("pets.json",JSON.stringify(array),function(e)
+            {
+              console.log('done');
+            })
            }
         else
           {
@@ -95,32 +103,9 @@ app.get('/:method',function(req,res)
       res.json(array);
     }
 })
-
-// app.get('/:method/:oldname/:newname',function(req,res)
-// {
-//   if(req.params.method==="update")
-//     {
-//       res.send("hello");
-//       console.log("45");
-//       // array.forEach(function(animals)
-//       // {
-//       //   if(req.params.name===animals.name)
-//       //     {
-//       //       console.log("hello");
-//       //     }
-//       // })
-//     }
-// });
-
-// app.post('/add', function(req, res) {
-//   // note that we're using req.body.item
-//   // rather than req.params.item or
-//   // req.query.item
-//   items.push(new person(req.body.first, req.body.last, req.body.email));
-//   res.render('movieposter.ejs', { items: items });
-//   console.log(items);
-// })
-
 app.listen(3000);
+});
+
+
 
 console.log('listening on port 3000!');
