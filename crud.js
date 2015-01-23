@@ -1,5 +1,6 @@
 var express = require('express');
 var ejs = require('ejs');
+var fs = require('fs');
 //var bodyParser = require('body-parser');
 
 var app = express();
@@ -21,6 +22,11 @@ app.get('/:method/:name/:pet',function(req,res)
         array.push(data);
         console.log(array);
         res.json(data)
+
+        fs.writeFile("pets.json",JSON.stringify(array),function(e)
+        {
+          console.log('done');
+        })
       }
 
     if(req.params.method==="update")
@@ -32,6 +38,11 @@ app.get('/:method/:name/:pet',function(req,res)
                 animals.name=req.params.pet;
                 console.log(array);
                 res.send("animal changed to name: "+animals.name+"!")
+
+                fs.writeFile("pets.json",JSON.stringify(array),function(e)
+                {
+                  console.log('done');
+                })
               }
           })
         }
@@ -63,13 +74,18 @@ app.get('/:method/:name',function(req,res)
             var index = array.indexOf(animals)
             array.splice(index,1);
             res.json(msg);
-          }
+
+          //   fs.writeFile("pets.json",JSON.stringify(array),function(e)
+          //   {
+          //     console.log('done');
+          //   })
+           }
         else
           {
             res.send("pet does not exist!");
           }
-      })
-    }
+      });
+    };
 });
 
 app.get('/:method',function(req,res)
