@@ -17,10 +17,8 @@ div4.id="inputbar";
 var input = document.createElement("input");
 div4.appendChild(input);
 input.type="text";
-// input.name="film";
 input.placeholder="search for something!";
 input.id="textbox";
-//var grab = input.value;
 
 var input2 = document.createElement("input");
 div4.appendChild(input2);
@@ -34,20 +32,12 @@ input2.addEventListener("click",function()
   var method_look = safeURL;
   var key = "&api_key=dc6zaTOxFJmzC";
 
-window.addEventListener("keydown",function(evt)
-{
-  if(evt.keyCode===39)
-    {
-      window.prompt("works!");
-    }
-})
   var xhr = new XMLHttpRequest();
   xhr.open("GET", "http://api.giphy.com/v1/gifs/search?q="+method_look+key)
   xhr.addEventListener("load", function(e)
   {
     var d=xhr.responseText;
     var parsed=JSON.parse(d);
-    console.log(parsed);
     var div5 = document.createElement("div")
     div3.appendChild(div5);
     div5.id="floats";
@@ -58,7 +48,32 @@ window.addEventListener("keydown",function(evt)
     var img = document.createElement("img");
     div5.appendChild(img);
     img.src=parsed.data[0].images.original.url;
-
   })
   xhr.send();
+})
+
+var counter = 1;
+window.addEventListener("keydown",function(evt)
+{
+  if(evt.keyCode===39)
+    {
+      var safeURL = encodeURI(input.value);
+      var method_look = safeURL;
+      var key = "&api_key=dc6zaTOxFJmzC";
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://api.giphy.com/v1/gifs/search?q="+method_look+key)
+      xhr.addEventListener("load", function(e)
+      {
+        var d=xhr.responseText;
+        var parsed=JSON.parse(d);
+
+        var h1= document.querySelector("h1");
+        h1.innerText=parsed.data[counter].caption;
+
+        var img = document.querySelector("img");
+        img.src=parsed.data[counter].images.original.url;
+        counter++;
+      })
+      xhr.send();
+    }
 })
